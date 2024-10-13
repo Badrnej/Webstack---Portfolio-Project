@@ -1,25 +1,29 @@
 <template>
-  <header class="bg-white shadow-md">
-    <div class="container mx-auto px-6 py-4">
+  <header class="bg-gradient-to-r from-gray-900 to-gray-800 shadow-lg">
+    <div class="container mx-auto px-4 py-3">
       <div class="flex items-center justify-between">
-        <div class="flex items-center">
-          <button @click="toggleSidebar" class="text-gray-500 focus:outline-none md:hidden">
-            <MenuIcon class="h-6 w-6" />
-          </button>
-          <input
-            class="ml-4 md:ml-0 w-64 px-4 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            type="search"
-            placeholder="Search..."
-          />
+        <!-- Left side content (assumed to be here) -->
+        <div>
+          <!-- Add your left side content here -->
         </div>
-        <div class="flex items-center">
-          <button class="flex items-center text-gray-700 mr-4">
-            <BellIcon class="h-5 w-5" />
-            <span class="ml-2 text-sm font-medium">Notifications</span>
+
+        <!-- Right side with profile and notifications -->
+        <div class="flex items-center space-x-6">
+          <button class="flex items-center text-gray-300 hover:text-white transition-colors duration-200 group">
+            <div class="relative">
+              <Bell class="h-5 w-5" />
+              <span class="absolute -top-1 -right-1 bg-red-500 rounded-full w-3 h-3 border-2 border-gray-800 group-hover:border-gray-700 transition-colors duration-200"></span>
+            </div>
+            <span class="ml-2 text-sm font-medium hidden sm:inline">Notifications</span>
           </button>
-          <button class="flex items-center text-gray-700">
-            <UserIcon class="h-5 w-5" />
-            <span class="ml-2 text-sm font-medium">Profile</span>
+          <button class="flex items-center text-gray-300 hover:text-white transition-colors duration-200">
+            <div class="relative">
+              <div class="w-8 h-8 rounded-full border-2 border-gray-600 bg-gray-400 flex items-center justify-center">
+                <User class="h-5 w-5 text-gray-600" />
+              </div>
+              <span class="absolute bottom-0 right-0 bg-green-500 rounded-full w-3 h-3 border-2 border-gray-800"></span>
+            </div>
+            <span class="ml-2 text-sm font-medium hidden sm:inline">Profile</span>
           </button>
         </div>
       </div>
@@ -28,9 +32,10 @@
 </template>
 
 <script setup>
-// import { MenuIcon, BellIcon, UserIcon } from 'lucide-vue-next'
+import { Bell, User } from 'lucide-vue-next'
 
-const toggleSidebar = () => {
-  // Implement sidebar toggle functionality
-}
 </script>
+
+<style scoped>
+/* Add any additional styles here if needed */
+</style>

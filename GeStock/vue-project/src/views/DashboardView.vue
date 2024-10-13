@@ -1,6 +1,6 @@
 <script setup>
 import AppHeader from '@/components/Dashboard/AppHeader.vue';
-import Sidebar from '@/components/Dashboard/Sidebar/Sidebar.vue';
+import Sidebar from '@/components/Dashboard/Sidebar/SideBar.vue';
 import AppTable from '@/components/Dashboard/table/AppTable.vue';
 import { ref } from 'vue'
   

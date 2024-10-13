@@ -11,8 +11,10 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@headlessui/vue": "^1.7.23",
     "@heroicons/vue": "^2.1.5",
     "axios": "^1.7.3",
+    "lucide-vue-next": "^0.452.0",
     "vue": "^3.4.29",
     "vue-router": "^4.3.3",
     "vuex": "^4.0.2"

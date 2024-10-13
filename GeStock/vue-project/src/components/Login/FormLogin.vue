@@ -1,50 +1,91 @@
 <script setup>
-import { reactive } from 'vue';
-import { useStore } from 'vuex'; // Importation de vuex
+import { reactive } from 'vue'
+import { useStore } from 'vuex'
+import { Mail, Lock, LogIn } from 'lucide-vue-next'
+import { RouterLink } from 'vue-router'
 
-// Création de l'objet credentials en utilisant reactive
 const credentials = reactive({
   email: '',
   password: ''
-});
+})
 
-// Utilisation du store Vuex
-const store = useStore();
+const store = useStore()
 
-// Fonction pour gérer la soumission du formulaire
 const handleLogin = () => {
-  store.dispatch('login', credentials);
-};
+  store.dispatch('login', credentials)
+}
 </script>
 
 <template>
-  <div class="w-1/3 bg-white rounded-xl shadow-lg">
-    <div class="p-6 space-y-4">
-      <h1 class="text-2xl font-bold text-center mb-8">
-        Sign in to your account
-      </h1>
-      <div class="flex justify-center">
-        <img class="w-18" src="./img/icons8-lock (1).gif" alt="">
+  <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-100 p-6">
+    <div class="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden">
+      <div class="p-8 space-y-6">
+        <div class="text-center">
+          <h1 class="text-3xl font-bold text-purple-700 mb-2">Welcome back</h1>
+          <p class="text-gray-600">Sign in to your account</p>
+        </div>
+        
+        <div class="flex justify-center">
+          <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center">
+            <Lock class="w-12 h-12 text-purple-500" />
+          </div>
+        </div>
+
+        <form class="space-y-6" @submit.prevent="handleLogin">
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email address</label>
+            <div class="relative">
+              <Mail class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+              <input
+                v-model="credentials.email"
+                type="email"
+                id="email"
+                class="pl-10 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                placeholder="you@example.com"
+                required
+              >
+            </div>
+          </div>
+          
+          <div>
+            <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <div class="relative">
+              <Lock class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+              <input
+                v-model="credentials.password"
+                type="password"
+                id="password"
+                class="pl-10 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                placeholder="••••••••"
+                required
+              >
+            </div>
+          </div>
+
+          <div>
+            <button
+              type="submit"
+              class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-white bg-purple-600 hover:bg-orange-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition duration-150 ease-in-out"
+            >
+              <LogIn class="w-5 h-5 mr-2" />
+              Sign in
+            </button>
+          </div>
+        </form>
+
+        <div class="text-center">
+          <p class="text-sm text-gray-600">
+            Don't have an account yet? 
+            <RouterLink to="/sign-up" class="font-medium text-purple-600 hover:text-orange-400">
+              Sign up
+            </RouterLink>
+          </p>
+        </div>
       </div>
-      <!-- Formulaire de connexion -->
-      <form class="space-y-4" @submit.prevent="handleLogin"> <!-- Gestionnaire de soumission -->
-        <div>
-          <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Your email</label>
-          <!-- Liaison bidirectionnelle avec v-model -->
-          <input v-model="credentials.email" type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2.5" placeholder="name@company.com" required="">
-        </div>
-        <div>
-          <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Password</label>
-          <!-- Liaison bidirectionnelle avec v-model -->
-          <input v-model="credentials.password" type="password" id="password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2.5" required="">
-        </div>
-        <!-- Bouton de soumission -->
-        <button type="submit" class="w-full text-white bg-primary-600 hover:bg-primary-700 font-medium rounded-lg text-sm py-3 text-center bg-blue-500">Sign in</button>
-        <p class="text-sm font-light text-gray-500 dark:text-gray-400">
-          Don’t have an account yet? 
-          <RouterLink to="/sign-up" class="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign up</RouterLink>
-        </p>
-      </form>
     </div>
   </div>
 </template>
+
+<style scoped>
+/* Add any additional styles here if needed */
+</style>
