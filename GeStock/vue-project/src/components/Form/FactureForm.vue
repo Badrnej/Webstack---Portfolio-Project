@@ -6,7 +6,7 @@
           <select
             v-model="formData.clientId"
             id="clientId"
-            class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+            class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-purple-700"
             required
           >
             <option value="">Sélectionnez un client</option>
@@ -22,7 +22,7 @@
             v-model="formData.date"
             type="date"
             id="date"
-            class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+            class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-purple-700"
             required
           />
         </div>
@@ -33,7 +33,7 @@
         <div v-for="(item, index) in formData.items" :key="index" class="grid grid-cols-5 gap-2 mb-2">
           <select
             v-model="item.productId"
-            class="col-span-2 px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+            class="col-span-2 px-3 py-2 border rounded-lg focus:outline-none focus:border-purple-700"
           >
             <option value="">Sélectionnez un produit</option>
             <option v-for="product in products" :key="product.id" :value="product.id">
@@ -44,13 +44,13 @@
             v-model.number="item.quantity"
             type="number"
             placeholder="Quantité"
-            class="px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+            class="px-3 py-2 border rounded-lg focus:outline-none focus:border-purple-700"
           />
           <input
             v-model.number="item.price"
             type="number"
             placeholder="Prix unitaire"
-            class="px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+            class="px-3 py-2 border rounded-lg focus:outline-none focus:border-purple-700"
           />
           <button @click="removeItem(index)" type="button" class="bg-red-500 text-white px-2 rounded-lg">
             Supprimer
@@ -67,7 +67,7 @@
           v-model="formData.notes"
           id="notes"
           rows="3"
-          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-purple-700"
         ></textarea>
       </div>
       
@@ -75,7 +75,7 @@
         <p class="font-medium">Total : {{ calculateTotal }} €</p>
       </div>
       
-      <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">
+      <button type="submit" class="w-full bg-purple-700 text-white py-2 rounded-lg hover:bg-orange-400">
         Générer la facture
       </button>
     </form>

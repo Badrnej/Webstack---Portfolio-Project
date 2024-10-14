@@ -1,21 +1,171 @@
-<template>
-  <div>
-    <!-- Title and button on the same line -->
-    <div class="flex items-center justify-between mb-4">
-      <h2 class="text-xl ml-4 mt-6 font-semibold">Customers</h2>
+<script setup>
+import { computed, ref, onMounted } from 'vue'
+import { useStore } from 'vuex'
+import { Users, UserPlus, ChevronDown, ChevronUp, Search } from 'lucide-vue-next'
+import AppTable from '@/components/Dashboard/table/AppTable.vue'
+import ClientsForm from '@/components/Form/clientsForm.vue'
+import FormModal from '@/components/utils/Modal.vue'
 
-      <button
-  @click="addNewClient"
-  class="btn-add-client mt-6 mr-4 bg-purple-500 hover:bg-orange-400 text-white px-3 py-1 rounded-md text-sm flex items-center transition duration-300 ease-in-out"
->
-  {{ showForm ? 'Annuler' : 'Ajouter un client' }}
-</button>
+const store = useStore()
+const showForm = ref(false)
+const selectedClient = ref(null)
+const searchQuery = ref('')
+const showStats = ref(true)
+
+const customerActivity = computed(() => {
+  return store.getters.getClients.filter(client => 
+    client.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    client.email.toLowerCase().includes(searchQuery.value.toLowerCase())
+  )
+})
+
+const customerStats = [
+  { month: 'Jan', newCustomers: 5, activeCustomers: 20 },
+  { month: 'Feb', newCustomers: 8, activeCustomers: 25 },
+  { month: 'Mar', newCustomers: 12, activeCustomers: 30 },
+  { month: 'Apr', newCustomers: 7, activeCustomers: 35 },
+  { month: 'May', newCustomers: 10, activeCustomers: 40 },
+  { month: 'Jun', newCustomers: 15, activeCustomers: 45 },
+]
+
+const maxNewCustomers = Math.max(...customerStats.map(stat => stat.newCustomers))
+const maxActiveCustomers = Math.max(...customerStats.map(stat => stat.activeCustomers))
+
+onMounted(() => {
+  store.dispatch('fetchClients')
+})
+
+function closeForm() {
+  showForm.value = false
+}
+
+function addNewClient() {
+  selectedClient.value = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    address: '',
+    siret: ''
+  }
+  showForm.value = true
+}
+
+function editClient(client) {
+  selectedClient.value = {
+    id: client.id,
+    firstName: client.name.split(' ')[0],
+    lastName: client.name.split(' ')[1],
+    email: client.email,
+    phone: client.phone,
+    address: client.address,
+    siret: client.siret || ''
+  }
+  showForm.value = true
+}
+
+function deleteClient(clientId) {
+  const confirmDelete = confirm("Are you sure you want to delete this client?")
+  if (confirmDelete) {
+    store.dispatch('deleteClient', clientId)
+      .then(() => {
+        console.log('Client deleted successfully')
+        store.dispatch('fetchClients')
+      })
+      .catch(error => {
+        console.error('Error deleting client:', error)
+      })
+  }
+}
+
+async function handleSubmit(formData) {
+  if (selectedClient.value) {
+    await store.dispatch('updateClient', { ...formData, id: selectedClient.value.id })
+  } else {
+    await store.dispatch('createClient', {
+      name: `${formData.firstName} ${formData.lastName}`,
+      email: formData.email,
+      phone: formData.phone,
+      address: formData.address,
+      siret: formData.siret
+    })
+  }
+  closeForm()
+}
+</script>
+
+<template>
+  <div class="bg-gray-100 min-h-screen p-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-3xl font-bold text-gray-800 flex items-center">
+              <Users class="w-8 h-8 mr-2 text-violet-600" />
+              Customers
+            </h2>
+            <button
+              @click="addNewClient"
+              class="bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-md text-sm flex items-center transition duration-300 ease-in-out"
+            >
+              <UserPlus class="w-5 h-5 mr-2" />
+              {{ showForm ? 'Cancel' : 'Add Client' }}
+            </button>
+          </div>
+
+          <div class="mb-8">
+            <button
+              @click="showStats = !showStats"
+              class="flex items-center text-gray-600 hover:text-gray-800 transition-colors duration-300"
+            >
+              <span class="mr-2 font-semibold">Customer Statistics</span>
+              <ChevronDown v-if="!showStats" class="w-5 h-5" />
+              <ChevronUp v-else class="w-5 h-5" />
+            </button>
+            <div v-show="showStats" class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="bg-white p-4 rounded-lg shadow">
+                <h3 class="text-lg font-semibold mb-4">New Customers</h3>
+                <div class="h-64 flex items-end">
+                  <div v-for="stat in customerStats" :key="stat.month" class="flex-1 flex flex-col items-center">
+                    <div class="w-full bg-blue-500 rounded-t" :style="{ height: `${(stat.newCustomers / maxNewCustomers) * 100}%` }"></div>
+                    <span class="text-xs mt-1">{{ stat.month }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-white p-4 rounded-lg shadow">
+                <h3 class="text-lg font-semibold mb-4">Active Customers</h3>
+                <div class="h-64 flex items-end">
+                  <div v-for="stat in customerStats" :key="stat.month" class="flex-1 flex flex-col items-center">
+                    <div class="w-full bg-green-500 rounded-t" :style="{ height: `${(stat.activeCustomers / maxActiveCustomers) * 100}%` }"></div>
+                    <span class="text-xs mt-1">{{ stat.month }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-6">
+            <div class="relative">
+              <input
+                v-model="searchQuery"
+                type="text"
+                placeholder="Search clients..."
+                class="w-full px-4 py-2 border border-gray-300 rounded-md pl-10 focus:outline-none focus:ring-2 focus:ring-violet-500"
+              />
+              <Search class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+            </div>
+          </div>
+
+          <AppTable
+            :data="customerActivity"
+            @editItem="editClient"
+            @deleteItem="deleteClient"
+            class="w-full"
+          />
+        </div>
+      </div>
     </div>
 
-    <!-- Client Activities Table -->
-    <AppTable :data="customerActivity" @editItem="editClient" @deleteItem="deleteClient" />
-
-    <!-- Modal for Client Form -->
     <FormModal :isVisible="showForm" @close="closeForm">
       <ClientsForm 
         :formData="selectedClient" 
@@ -25,101 +175,33 @@
   </div>
 </template>
 
-<script setup>
-import { computed, ref } from 'vue';
-import { useStore } from 'vuex';
-import AppTable from '@/components/Dashboard/table/AppTable.vue';
-import ClientsForm from '@/components/Form/clientsForm.vue'; // Adjust path as necessary
-import FormModal from '@/components/utils/Modal.vue'; // Adjust path as necessary
-
-// Access the Vuex store
-const store = useStore();
-const showForm = ref(false);
-const selectedClient = ref(null); // To hold the client data for editing
-
-// Create a computed property to get client data from the state
-const customerActivity = computed(() => {
-  return store.getters.getClients; // Fetch clients from Vuex store
-});
-
-// Fetch data when component is mounted
-store.dispatch('fetchClients'); // Dispatch action to fetch clients
-
-// To
-
-// Close form
-function closeForm() {
-  showForm.value = false;
-}
-// Add this function
-function addNewClient() {
-  selectedClient.value = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    address: '',
-    siret: ''
-  };
-  showForm.value = true;
-}
-
-
-
-// Modify the existing editClient function
-function editClient(client) {
-  selectedClient.value = {
-    id: client.id, // Make sure to include the id for updating
-    firstName: client.name.split(' ')[0],
-    lastName: client.name.split(' ')[1],
-    email: client.email,
-    phone: client.phone,
-    address: client.address,
-    siret: client.siret || ''
-  };
-  showForm.value = true;
-}
-
-
-function deleteClient(clientId) {
-  // Confirm deletion with user
-  const confirmDelete = confirm("Êtes-vous sûr de vouloir supprimer ce client ?");
-  if (confirmDelete) {
-    store.dispatch('deleteClient', clientId)
-      .then(() => {
-        console.log('Client deleted successfully');
-        // Optionally fetch clients again or update state here
-        store.dispatch('fetchClients'); // Refresh client list after deletion
-      })
-      .catch(error => {
-        console.error('Error deleting client:', error);
-      });
-  }
-}
-
-
-// Handle form submission
-async function handleSubmit(formData) {
-  console.log('Submitted form data:', formData);
-
-  if (selectedClient.value) {
-    // Update existing client
-    await store.dispatch('updateClient', { ...formData, id: selectedClient.value.id });
-  } else {
-    // Create new client
-    await store.dispatch('createClient', {
-      name: `${formData.firstName} ${formData.lastName}`, // Combine first and last name if needed
-      email: formData.email,
-      phone: formData.phone,
-      address: formData.address,
-      siret: formData.siret // Include SIRET if applicable
-    });
-  }
-
-  closeForm(); // Close the modal after submission
-}
-</script>
-
 <style scoped>
-/* Add any additional styles here */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-down-enter-active {
+  animation: slideDown 0.3s ease-out;
+}
+
+.slide-down-leave-active {
+  animation: slideDown 0.3s ease-in reverse;
+}
 </style>

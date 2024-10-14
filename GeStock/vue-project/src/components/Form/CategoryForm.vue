@@ -6,7 +6,7 @@
           v-model="formData.name"
           type="text"
           id="name"
-          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-purple-700"
           required
         />
       </div>
@@ -17,11 +17,11 @@
           v-model="formData.description"
           id="description"
           rows="3"
-          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-purple-700"
         ></textarea>
       </div>
       
-      <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">
+      <button type="submit" class="w-full bg-purple-700 text-white py-2 rounded-lg hover:bg-orange-400">
         Enregistrer la catégorie
       </button>
     </form>

@@ -6,7 +6,7 @@
           v-model="formData.name"
           type="text"
           id="name"
-          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-purple-700"
           required
         />
       </div>
@@ -19,7 +19,7 @@
             type="number"
             id="price"
             step="0.01"
-            class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+            class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-purple-700"
             required
           />
         </div>
@@ -31,7 +31,7 @@
             type="number"
             id="stock"
             min="0"
-            class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+            class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-purple-700"
             required
           />
         </div>
@@ -42,7 +42,7 @@
         <select
           v-model="formData.categoryId"
           id="category"
-          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-purple-700"
           required
         >
           <option value="">Sélectionnez une catégorie</option>
@@ -57,7 +57,7 @@
         <select
           v-model="formData.supplierId"
           id="supplier"
-          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-purple-700"
           required
         >
           <option value="">Sélectionnez un fournisseur</option>
@@ -73,7 +73,7 @@
           v-model="formData.sku"
           type="text"
           id="sku"
-          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-purple-700"
         />
       </div>
   
@@ -83,7 +83,7 @@
           v-model="formData.description"
           id="description"
           rows="3"
-          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-purple-700"
         ></textarea>
       </div>
   
@@ -95,7 +95,7 @@
             type="number"
             id="minStock"
             min="0"
-            class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+            class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-purple-700"
           />
         </div>
         
@@ -106,7 +106,7 @@
             type="number"
             id="weight"
             step="0.01"
-            class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+            class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-purple-700"
           />
         </div>
       </div>
@@ -146,7 +146,7 @@
         </label>
       </div>
       
-      <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">
+      <button type="submit" class="w-full bg-purple-700 text-white py-2 rounded-lg hover:bg-orange-400">
         {{ formData.id ? 'Mettre à jour' : 'Enregistrer' }} le produit
       </button>
     </form>
