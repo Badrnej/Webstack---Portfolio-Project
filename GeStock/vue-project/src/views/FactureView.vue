@@ -25,7 +25,7 @@
             </div>
             <div class="bg-green-100 p-4 rounded-lg shadow">
               <h3 class="text-lg font-semibold mb-2 text-green-800">Montant Total</h3>
-              <p class="text-3xl font-bold text-green-600">{{ totalAmount }} €</p>
+              <p class="text-3xl font-bold text-green-600">{{ totalAmount }} MAD</p>
             </div>
             <div class="bg-yellow-100 p-4 rounded-lg shadow">
               <h3 class="text-lg font-semibold mb-2 text-yellow-800">Factures en Attente</h3>

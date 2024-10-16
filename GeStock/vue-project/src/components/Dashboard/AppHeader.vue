@@ -7,14 +7,14 @@
           <!-- Add your left side content here -->
         </div>
 
-        <!-- Right side with profile and notifications -->
-        <div class="flex items-center space-x-6">
+        <!-- Right side with notifications, profile, and logout -->
+        <div class="flex items-center space-x-4">
           <button class="flex items-center text-gray-300 hover:text-white transition-colors duration-200 group">
             <div class="relative">
               <Bell class="h-5 w-5" />
               <span class="absolute -top-1 -right-1 bg-red-500 rounded-full w-3 h-3 border-2 border-gray-800 group-hover:border-gray-700 transition-colors duration-200"></span>
             </div>
-            <span class="ml-2 text-sm font-medium hidden sm:inline">Notifications</span>
+            <span class="ml-2 text-sm font-medium hidden sm:inline"></span>
           </button>
           <button class="flex items-center text-gray-300 hover:text-white transition-colors duration-200">
             <div class="relative">
@@ -23,7 +23,11 @@
               </div>
               <span class="absolute bottom-0 right-0 bg-green-500 rounded-full w-3 h-3 border-2 border-gray-800"></span>
             </div>
-            <span class="ml-2 text-sm font-medium hidden sm:inline">Profile</span>
+            <span class="ml-2 text-sm font-medium hidden sm:inline"></span>
+          </button>
+          <button @click="logout" class="flex items-center text-gray-300 hover:text-white transition-colors duration-200">
+            <LogOut class="h-5 w-5" />
+            <span class="ml-2 text-sm font-medium hidden sm:inline"></span>
           </button>
         </div>
       </div>
@@ -32,8 +36,22 @@
 </template>
 
 <script setup>
-import { Bell, User } from 'lucide-vue-next'
+import { Bell, User, LogOut } from 'lucide-vue-next'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
+const router = useRouter()
+const store = useStore()
+
+const logout = async () => {
+  try {
+    await store.dispatch('logout')
+    router.push('/login')
+  } catch (error) {
+    console.error('Logout failed:', error)
+    // Handle logout error (e.g., show a notification to the user)
+  }
+}
 </script>
 
 <style scoped>

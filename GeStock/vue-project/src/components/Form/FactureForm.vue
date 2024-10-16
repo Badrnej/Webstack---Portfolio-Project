@@ -72,7 +72,7 @@
       </div>
       
       <div class="text-right mb-4">
-        <p class="font-medium">Total : {{ calculateTotal }} €</p>
+        <p class="font-medium">Total : {{ calculateTotal }} MAD</p>
       </div>
       
       <button type="submit" class="w-full bg-purple-700 text-white py-2 rounded-lg hover:bg-orange-400">

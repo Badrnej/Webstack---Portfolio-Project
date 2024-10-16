@@ -29,6 +29,10 @@ import AppCustomer from './AppCustomer.vue'
 import AppSuppliers from './AppSuppliers.vue'
 import AppUsers from './AppUsers.vue'
 import AppFactures from './AppFactures.vue'
+
+defineOptions({
+  name: 'AppSidebar'
+})
 </script>
 
 <style scoped>
