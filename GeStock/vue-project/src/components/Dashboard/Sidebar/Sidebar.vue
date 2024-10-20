@@ -1,5 +1,5 @@
 <template>
-  <aside class="sidebar bg-gradient-to-br from-indigo-900 via-purple-800 to-pink-700 text-white h-screen w-64 flex flex-col shadow-2xl relative overflow-hidden">
+  <aside class="sidebar bg-gradient-to-br from-indigo-900 via-purple-800 to-orange-400 text-white h-screen w-64 flex flex-col shadow-2xl relative overflow-hidden">
     <div class="noise-overlay"></div>
     <div class="backdrop-blur-md bg-white/10 absolute inset-0"></div>
     <div class="relative z-10 p-6">
@@ -15,14 +15,6 @@
       <AppUsers />
       <AppFactures />
     </nav>
-    <div class="p-5 border-t border-white/20 relative z-10">
-      <a href="#" class="flex items-center space-x-3 text-white/80 hover:text-white transition-all duration-300 group">
-        <div class="p-2 rounded-full bg-white/10 group-hover:bg-white/20 transition-all duration-300">
-          <Settings class="w-5 h-5" />
-        </div>
-        <span class="font-medium">Settings</span>
-      </a>
-    </div>
   </aside>
 </template>
 
@@ -56,6 +48,7 @@ defineOptions({
 
 .gradient-text {
   background: linear-gradient(to right, #fff, #e0e7ff);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
