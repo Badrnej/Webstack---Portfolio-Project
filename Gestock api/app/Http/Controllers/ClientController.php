@@ -11,26 +11,25 @@ class ClientController extends Controller
 
     public function store(Request $request) {
         $user = Auth::user();
-
+    
         $validatedData = $request->validate([
             'firstName' => 'required|string',
             'lastName' => 'required|string',
-            'email' => 'required|email|unique:clients,email', // Ensure unique email for clients
+            'email' => 'required|email|unique:clients,email',
             'phone' => 'required|string',
             'address' => 'required|string',
         ]);
-
-        // Combine first name and last name into a full name if needed
+    
         $clientData = [
             'name' => $validatedData['firstName'] . ' ' . $validatedData['lastName'],
             'email' => $validatedData['email'],
             'phone' => $validatedData['phone'],
             'address' => $validatedData['address'],
         ];
-
+    
         $client = Client::create($clientData);
-
-        return response()->json(['success' => 'Client created successfully'], 200);
+    
+        return response()->json($client, 201);
     }
 
     public function show_all(Request $reques){
@@ -49,17 +48,30 @@ class ClientController extends Controller
         }
     }
 
-    public function update(Request $reques,$id){
+    public function update(Request $request, $id) {
         $user = Auth::user();
-            $client = client::findOrFail($id);
-            $validatedData = $reques->validate([
-            'name' => 'nullable|string',
-            'email' => 'nullable|email',
-            'phone' => 'nullable|string',
-            'address' => 'nullable|string',
-            ]);
-            $client->update($validatedData);
-            return response()->json($client);
+        $client = Client::findOrFail($id);
+    
+        $validatedData = $request->validate([
+            'firstName' => 'required|string',
+            'lastName' => 'required|string',
+            'email' => 'required|email|unique:clients,email,' . $id,
+            'phone' => 'required|string',
+            'address' => 'required|string',
+            'siret' => 'nullable|string',
+        ]);
+    
+        $clientData = [
+            'name' => $validatedData['firstName'] . ' ' . $validatedData['lastName'],
+            'email' => $validatedData['email'],
+            'phone' => $validatedData['phone'],
+            'address' => $validatedData['address'],
+            'siret' => $validatedData['siret'] ?? null,
+        ];
+    
+        $client->update($clientData);
+    
+        return response()->json($client);
     }
 
     public function destroy($id){

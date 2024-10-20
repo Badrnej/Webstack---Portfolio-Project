@@ -8,7 +8,14 @@ import FormModal from '@/components/utils/Modal.vue'
 
 const store = useStore()
 const showForm = ref(false)
-const selectedClient = ref(null)
+const selectedClient = ref({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    address: '',
+    siret: ''
+  })
 const searchQuery = ref('')
 const showStats = ref(true)
 
@@ -79,19 +86,21 @@ function deleteClient(clientId) {
 }
 
 async function handleSubmit(formData) {
-  if (selectedClient.value) {
+  if (selectedClient.value == {
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    address: '',
+    siret: ''
+  }) {
     await store.dispatch('updateClient', { ...formData, id: selectedClient.value.id })
   } else {
-    await store.dispatch('createClient', {
-      name: `${formData.firstName} ${formData.lastName}`,
-      email: formData.email,
-      phone: formData.phone,
-      address: formData.address,
-      siret: formData.siret
-    })
+    await store.dispatch('createClient', { ...formData })
   }
   closeForm()
 }
+console.log(selectedClient.value)
 </script>
 
 <template>

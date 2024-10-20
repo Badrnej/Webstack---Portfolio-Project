@@ -135,34 +135,27 @@ const store = createStore({
             headers: { 'Authorization': `Bearer ${sessionStorage.getItem('token')}` }
           });
           
-          commit('setClients', [...this.state.clients, response.data]); // Add the new client to the existing list
+          commit('setClients', [...this.state.clients, response.data]);
         } catch (error) {
           commit('setError', 'Error creating client');
+          throw error;
         }
       },
-   
+      
       async updateClient({ commit }, clientData) {
         try {
-          const response = await axios.post(`http://127.0.0.1:8000/api/client/update/${clientData.id}`, {
-            name: `${clientData.firstName} ${clientData.lastName}`, // Combine first and last name if needed
-            email: clientData.email,
-            phone: clientData.phone,
-            address: clientData.address,
-            siret: clientData.siret // Include SIRET if applicable
-          }, {
+          const response = await axios.post(`http://127.0.0.1:8000/api/client/update/${clientData.id}`, clientData, {
             headers: { 'Authorization': `Bearer ${sessionStorage.getItem('token')}` }
           });
       
-          // Optionally update local state or fetch clients again after updating.
-          
           const updatedClients = this.state.clients.map(client =>
             client.id === response.data.id ? response.data : client
           );
           
           commit('setClients', updatedClients);
-          
         } catch (error) {
           commit('setError', 'Error updating client');
+          throw error;
         }
       },
       async deleteClient({ commit }, clientId) {
