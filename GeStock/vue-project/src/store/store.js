@@ -184,7 +184,18 @@ const store = createStore({
           commit('setError', 'Error fetching fournisseurs');
         }
       },
-
+    
+      async fetchFournisseur({ commit }, id) {
+        try {
+          const response = await axios.get(`http://127.0.0.1:8000/api/fournissur/${id}`, {
+            headers: { 'Authorization': `Bearer ${sessionStorage.getItem('token')}` }
+          });
+          return response.data; // Return the fetched fournisseur data
+        } catch (error) {
+          commit('setError', 'Error fetching fournisseur');
+        }
+      },
+    
       async createFournisseur({ commit }, fournisseurData) {
         try {
           const response = await axios.post('http://127.0.0.1:8000/api/fournissur', fournisseurData, {
@@ -194,6 +205,38 @@ const store = createStore({
           commit('setFournisseurs', [...this.state.fournisseurs, response.data]); // Add the new fournisseur to the existing list
         } catch (error) {
           commit('setError', 'Error creating fournisseur');
+        }
+      },
+    
+      async updateFournisseur({ commit, state }, fournisseurData) {
+        try {
+          const response = await axios.post(`http://127.0.0.1:8000/api/fournissur/update/${fournisseurData.id}`, fournisseurData, {
+            headers: { 'Authorization': `Bearer ${sessionStorage.getItem('token')}` }
+          });
+      
+          // Update the local state with the updated fournisseur
+          const updatedFournisseurs = state.fournisseurs.map(f => 
+            f.id === fournisseurData.id ? response.data : f
+          );
+          
+          commit('setFournisseurs', updatedFournisseurs);
+        } catch (error) {
+          commit('setError', 'Error updating fournisseur');
+        }
+      },
+    
+      async deleteFournisseur({ commit }, id) {
+        try {
+          await axios.delete(`http://127.0.0.1:8000/api/fournissur/${id}`, {
+            headers: { 'Authorization': `Bearer ${sessionStorage.getItem('token')}` }
+          });
+    
+          // Remove the deleted fournisseur from the state
+          const filteredFournisseurs = this.state.fournisseurs.filter(f => f.id !== id);
+          
+          commit('setFournisseurs', filteredFournisseurs);
+        } catch (error) {
+          commit('setError', 'Error deleting fournisseur');
         }
       },
 

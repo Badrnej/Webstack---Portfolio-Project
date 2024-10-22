@@ -42,9 +42,9 @@ class FournissurController extends Controller
         $id=$reques->id;
         $Fournissur=Fournissur::find($id);
         if($Fournissur){
-            return response()->json([
+            return response()->json(
                 $Fournissur
-                ],200);
+                ,200);
         }
     }
 

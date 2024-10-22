@@ -74,11 +74,11 @@
     </div>
 
     <FormModal :isVisible="showForm" @close="closeForm">
-      <FournissurForm 
-        :formData="selectedSupplier" 
-        @submit="handleSubmit" 
-      />
-    </FormModal>
+    <FournissurForm 
+      :initialData="selectedSupplier" 
+      @submit="handleSubmit" 
+    />
+  </FormModal>
   </div>
 </template>
 
@@ -92,7 +92,13 @@ import FormModal from '@/components/utils/Modal.vue'
 
 const store = useStore()
 const showForm = ref(false)
-const selectedSupplier = ref(null)
+const selectedSupplier = ref({
+  id:'',
+  nom:'',
+  email:'',
+  phone:'',
+  address:''
+})
 const searchQuery = ref('')
 
 const fournisseurs = computed(() => {
@@ -125,21 +131,27 @@ const tableColumns = [
 onMounted(() => {
   store.dispatch('fetchFournisseurs')
 })
-
 function toggleForm() {
   showForm.value = !showForm.value
-  if (showForm.value) {
-    selectedSupplier.value = null
+  if (showForm.value && !selectedSupplier.value) {
+    selectedSupplier.value = {
+      id: '',
+      nom: '',
+      email: '',
+      phone: '',
+      address: ''
+    }
   }
 }
 
 function closeForm() {
   showForm.value = false
+  selectedSupplier.value = null
 }
 
 function handleSubmit(formData) {
-  if (selectedSupplier.value) {
-    store.dispatch('updateFournisseur', { ...formData, id: selectedSupplier.value.id })
+  if (selectedSupplier.value && selectedSupplier.value.id) {
+    store.dispatch('updateFournisseur', formData)
   } else {
     store.dispatch('createFournisseur', formData)
   }
