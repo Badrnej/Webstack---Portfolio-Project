@@ -96,10 +96,7 @@ const selectedSupplier = ref(null)
 const searchQuery = ref('')
 
 const fournisseurs = computed(() => {
-  return store.getters.getFournisseurs.filter(fournisseur => 
-    fournisseur.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    fournisseur.email.toLowerCase().includes(searchQuery.value.toLowerCase())
-  )
+  return store.getters.getFournisseurs
 })
 
 const totalSuppliers = computed(() => fournisseurs.value.length)

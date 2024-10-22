@@ -33,9 +33,9 @@ class FournissurController extends Controller
 
     public function show_all(Request $reques){
         $Fournissur=Fournissur::all();
-        return response()->json([
+        return response()->json(
             $Fournissur
-        ],200);
+        ,200);
     }
 
     public function show(Request $reques){
