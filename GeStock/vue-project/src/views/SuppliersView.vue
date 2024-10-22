@@ -63,7 +63,7 @@
           </div>
 
           <AppTable 
-            :data="filteredSuppliers" 
+            :data="fournisseurs" 
             :columns="tableColumns"
             @editItem="editSupplier"
             @deleteItem="deleteSupplier"
@@ -95,12 +95,10 @@ const showForm = ref(false)
 const selectedSupplier = ref(null)
 const searchQuery = ref('')
 
-const fournisseurs = computed(() => store.getters.getFournisseurs)
-
-const filteredSuppliers = computed(() => {
-  return fournisseurs.value.filter(supplier => 
-    supplier.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    supplier.category.toLowerCase().includes(searchQuery.value.toLowerCase())
+const fournisseurs = computed(() => {
+  return store.getters.getFournisseurs.filter(fournisseur => 
+    fournisseur.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    fournisseur.email.toLowerCase().includes(searchQuery.value.toLowerCase())
   )
 })
 

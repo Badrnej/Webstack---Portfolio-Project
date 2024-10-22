@@ -150,6 +150,7 @@ const paginatedData = computed(() =>
 watch(() => props.data, () => {
   if (props.data.length > 0 && visibleColumns.value.length === 0) {
     visibleColumns.value = Object.keys(props.data[0])
+    console.log(visibleColumns.value)
   }
 }, { immediate: true })
 

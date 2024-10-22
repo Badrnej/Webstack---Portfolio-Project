@@ -100,7 +100,6 @@ async function handleSubmit(formData) {
   }
   closeForm()
 }
-console.log(selectedClient.value)
 </script>
 
 <template>
