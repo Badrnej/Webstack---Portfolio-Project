@@ -33,22 +33,7 @@
             </div>
           </div>
 
-          <div class="mb-8">
-            <h3 class="text-xl font-semibold mb-4">Répartition des Rôles</h3>
-            <div class="h-64 flex items-end">
-              <div v-for="(value, role) in userRoleDistribution" :key="role" class="flex-1 flex flex-col items-center">
-                <div 
-                  class="w-full rounded-t transition-all duration-500 ease-in-out" 
-                  :style="{ 
-                    height: `${(value / Math.max(...Object.values(userRoleDistribution))) * 100}%`,
-                    backgroundColor: getRoleColor(role)
-                  }"
-                ></div>
-                <span class="text-xs mt-2">{{ role }}</span>
-                <span class="text-sm font-semibold">{{ value }}</span>
-              </div>
-            </div>
-          </div>
+       
 
           <div class="mb-6">
             <div class="relative">
@@ -112,14 +97,6 @@ const newUsers = computed(() => {
   return users.value.filter(user => new Date(user.createdAt) > thirtyDaysAgo).length
 })
 
-const userRoleDistribution = computed(() => {
-  const distribution = {}
-  users.value.forEach(user => {
-    distribution[user.role] = (distribution[user.role] || 0) + 1
-  })
-  return distribution
-})
-
 const tableColumns = [
   { key: 'name', label: 'Nom' },
   { key: 'email', label: 'Email' },
@@ -134,18 +111,19 @@ onMounted(() => {
 
 function toggleForm() {
   showForm.value = !showForm.value
-  if (showForm.value) {
+  if (!showForm.value) {
     selectedUser.value = null
   }
 }
 
 function closeForm() {
   showForm.value = false
+  selectedUser.value = null
 }
 
 function handleSubmit(formData) {
   if (selectedUser.value) {
-    store.dispatch('updateUser', { ...formData, id: selectedUser.value.id })
+    store.dispatch('updateUser', { userData: { ...formData, id: selectedUser.value.id } })
   } else {
     store.dispatch('createUser', formData)
   }
@@ -161,16 +139,6 @@ function deleteUser(userId) {
   if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
     store.dispatch('deleteUser', userId)
   }
-}
-
-function getRoleColor(role) {
-  const colors = {
-    'Admin': '#FF6B6B',
-    'Manager': '#4ECDC4',
-    'User': '#45B7D1',
-    'Guest': '#FFA07A'
-  }
-  return colors[role] || '#98D8C8'
 }
 </script>
 

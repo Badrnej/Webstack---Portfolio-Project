@@ -355,14 +355,18 @@ const store = createStore({
           commit("setError", "Erreur lors de la création de l'utilisateur");
         }
       },
-      async updateUser({ commit }, { id, userData }) {
+      async updateUser({ commit, state }, { userData }) {
         try {
-          const response = await axios.put(`http://127.0.0.1:8000/api/user/${id}`, userData, {
+          const response = await axios.put(`http://127.0.0.1:8000/api/user/${userData.id}`, userData, {
             headers: { 'Authorization': `Bearer ${sessionStorage.getItem("token")}` }
           });
-          commit("updateUser", response.data);
+          const updatedUsers = state.users.map(user => 
+            user.id === userData.id ? response.data : user
+          );
+          commit("setUsers", updatedUsers);
         } catch (error) {
           commit("setError", "Erreur lors de la mise à jour de l'utilisateur");
+          throw error;
         }
       },
       async deleteUser({ commit }, id) {

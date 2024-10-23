@@ -24,6 +24,10 @@
         <option value="Inactive">Inactive</option>
       </select>
     </div>
+    <div v-if="!formData">
+      <label for="password" class="block text-sm font-medium text-gray-700">Mot de passe</label>
+      <input v-model="form.password" type="password" id="password" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+    </div>
     <div>
       <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-orange-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
         {{ formData ? 'Mettre à jour' : 'Créer' }} l'utilisateur
@@ -33,12 +37,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, watch } from 'vue'
 
 const props = defineProps({
   formData: {
     type: Object,
-    default: () => ({})
+    default: () => null
   }
 })
 
@@ -48,14 +52,24 @@ const form = ref({
   name: '',
   email: '',
   role: 'User',
-  status: 'Active'
+  status: 'Active',
+  password: ''
 })
 
-onMounted(() => {
-  if (props.formData) {
-    form.value = { ...props.formData }
+watch(() => props.formData, (newFormData) => {
+  if (newFormData) {
+    form.value = { ...newFormData }
+    delete form.value.password // Remove password field when editing
+  } else {
+    form.value = {
+      name: '',
+      email: '',
+      role: 'User',
+      status: 'Active',
+      password: ''
+    }
   }
-})
+}, { immediate: true })
 
 const submitForm = () => {
   emit('submit', form.value)
