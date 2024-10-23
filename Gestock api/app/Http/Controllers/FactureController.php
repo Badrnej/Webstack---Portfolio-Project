@@ -82,6 +82,33 @@ class FactureController extends Controller
         }
     }
 
+    public function destroy($id){
+        try {
+            Log::info('Starting facture deletion', ['id' => $id]);
+            
+            $user = Auth::user();
+            if (!$user->can('gere les Factures')) {
+                Log::warning('Unauthorized facture deletion attempt', ['user_id' => $user->id]);
+                return response()->json(['error' => 'Non autorisé'], 403);
+            }
+
+            $facture = Facture::findOrFail($id);
+            $facture->delete();
+            
+            Log::info('Facture deleted successfully', ['id' => $id]);
+            
+            return response()->json([
+                'success' => 'Facture deleted successfully'
+            ], 200);
+            
+        } catch (\Exception $e) {
+            Log::error('Error deleting facture', [
+                'error' => $e->getMessage(),
+                'id' => $id
+            ]);
+            return response()->json(['error' => 'Failed to delete facture'], 500);
+        }
+    }
     public function update(Request $request, $id){
         try {
             Log::info('Starting facture update', ['id' => $id, 'request' => $request->all()]);
@@ -113,31 +140,4 @@ class FactureController extends Controller
         }
     }
 
-    public function destroy($id){
-        try {
-            Log::info('Starting facture deletion', ['id' => $id]);
-            
-            $user = Auth::user();
-            if (!$user->can('gere les Factures')) {
-                Log::warning('Unauthorized facture deletion attempt', ['user_id' => $user->id]);
-                return response()->json(['error' => 'Non autorisé'], 403);
-            }
-
-            $facture = Facture::findOrFail($id);
-            $facture->delete();
-            
-            Log::info('Facture deleted successfully', ['id' => $id]);
-            
-            return response()->json([
-                'success' => 'Facture deleted successfully'
-            ], 200);
-            
-        } catch (\Exception $e) {
-            Log::error('Error deleting facture', [
-                'error' => $e->getMessage(),
-                'id' => $id
-            ]);
-            return response()->json(['error' => 'Failed to delete facture'], 500);
-        }
-    }
 }
