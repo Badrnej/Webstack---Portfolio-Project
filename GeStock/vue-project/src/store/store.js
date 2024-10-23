@@ -345,17 +345,36 @@ const store = createStore({
           commit('setError', 'Error fetching users');
         }
       },
-      async createUser({commit}, userData){
-        try{
-            const response=await axios.post("http://127.0.0.1:8000/api/user",userData,{
-                headers:{'Authorization':`Bearer ${sessionStorage.getItem("token")}`}
-            });
-            commit("setUsers",[...this.state.users,response.data]);
-        }catch(error){
-            commit("setError","Erreur lors de la création de l'utilisateur");
+      async createUser({ commit }, userData) {
+        try {
+          const response = await axios.post("http://127.0.0.1:8000/api/user", userData, {
+            headers: { 'Authorization': `Bearer ${sessionStorage.getItem("token")}` }
+          });
+          commit("addUser", response.data);
+        } catch (error) {
+          commit("setError", "Erreur lors de la création de l'utilisateur");
         }
-      
       },
+      async updateUser({ commit }, { id, userData }) {
+        try {
+          const response = await axios.put(`http://127.0.0.1:8000/api/user/${id}`, userData, {
+            headers: { 'Authorization': `Bearer ${sessionStorage.getItem("token")}` }
+          });
+          commit("updateUser", response.data);
+        } catch (error) {
+          commit("setError", "Erreur lors de la mise à jour de l'utilisateur");
+        }
+      },
+      async deleteUser({ commit }, id) {
+        try {
+          await axios.delete(`http://127.0.0.1:8000/api/user/${id}`, {
+            headers: { 'Authorization': `Bearer ${sessionStorage.getItem("token")}` }
+          });
+          commit("removeUser", id);
+        } catch (error) {
+          commit("setError", "Erreur lors de la suppression de l'utilisateur");
+        }
+      }
       
   },
   getters: {
