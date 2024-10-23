@@ -36,7 +36,7 @@ class FactureController extends Controller
     }
 
     public function show_all(Request $request) {
-        $factures = Facture::paginate(10);
+        $factures = Facture::all();
     
         // Check if the returned data is an array or a single object
             return response()->json($factures, 200);

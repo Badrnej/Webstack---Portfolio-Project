@@ -294,6 +294,7 @@ const store = createStore({
           const response = await axios.get('http://127.0.0.1:8000/api/factures', {
             headers: { 'Authorization': `Bearer ${sessionStorage.getItem('token')}` }
           });
+          console.log(response.data)
           commit('setFactures', response.data);
         } catch (error) {
           commit('setError', 'Error fetching factures');
