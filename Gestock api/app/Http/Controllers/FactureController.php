@@ -5,88 +5,139 @@ namespace App\Http\Controllers;
 use App\Models\Facture;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class FactureController extends Controller
 {
     public function store(Request $request){
-        $user = Auth::user();
-        if ($user->can('gere les Factures')) {
-            $validateDta=$request->validate([
-                'price_totale'=>'required|numeric',
+        try {
+            Log::info('Starting facture creation', ['request' => $request->all()]);
+            
+            $user = Auth::user();
+       
+
+            $validatedData = $request->validate([
+                'price_totale' => 'required|numeric',
                 'les_prodact' => 'required|string',
                 'in_client' => 'required|integer',
-                'in_user'=>'required|integer',
             ]);
-    
-            $Facture=Facture::create($validateDta);
-            if($Facture){
-                return response()->json([
-                'success'=>'Facture created successfully'
-            ],200);
-            }else{
-                return response()->json([
-                    'error'=>'Facture not created'
-                ],500);
-            }
-        }else{
+            
+            $validatedData['in_user'] = $user->id;
+            
+            Log::info('Creating facture with data', ['data' => $validatedData]);
+            
+            $facture = Facture::create($validatedData);
+            $facture->load(['client', 'user']);
+            
+            Log::info('Facture created successfully', ['facture_id' => $facture->id]);
+            
+            return response()->json($facture, 201);
+            
+        } catch (\Exception $e) {
+            Log::error('Error creating facture', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
             return response()->json([
-                'error'=>'Non autorisé'
-            ],500);
+                'error' => 'Failed to create facture',
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 
     public function show_all(Request $request) {
-        $factures = Facture::all();
-    
-        // Check if the returned data is an array or a single object
+        try {
+            Log::info('Fetching all factures');
+            $factures = Facture::all();
             return response()->json($factures, 200);
-        
-        
-    }
-    public function show(Request $reques){
-        $id=$reques->id;
-        $Facture=Facture::find($id);
-        if($Facture){
-            return response()->json(
-                $Facture
-                ,200);
+        } catch (\Exception $e) {
+            Log::error('Error fetching factures', [
+                'error' => $e->getMessage()
+            ]);
+            return response()->json(['error' => 'Failed to fetch factures'], 500);
         }
     }
 
-    public function update(Request $request,$id){
-        $user = Auth::user();
-        if ($user->can('gere les Factures')) {
-            $Facture = Facture::findOrFail($id);
+    public function show(Request $request){
+        try {
+            $id = $request->id;
+            Log::info('Fetching facture', ['id' => $id]);
+            
+            $facture = Facture::with(['client', 'user'])->find($id);
+            
+            if (!$facture) {
+                Log::warning('Facture not found', ['id' => $id]);
+                return response()->json(['error' => 'Facture not found'], 404);
+            }
+            
+            return response()->json($facture, 200);
+            
+        } catch (\Exception $e) {
+            Log::error('Error fetching facture', [
+                'error' => $e->getMessage(),
+                'id' => $request->id
+            ]);
+            return response()->json(['error' => 'Failed to fetch facture'], 500);
+        }
+    }
+
+    public function update(Request $request, $id){
+        try {
+            Log::info('Starting facture update', ['id' => $id, 'request' => $request->all()]);
+            
+            $user = Auth::user();
+        
+            $facture = Facture::findOrFail($id);
 
             $validatedData = $request->validate([
-                'price_totale'=>'nullable|numeric',
-                'les_prodact' => 'nullable|string',
-                'in_client' => 'nullable|integer',
-                'in_user'=>'nullable|integer',
+                'price_totale' => 'sometimes|numeric',
+                'les_prodact' => 'sometimes|string',
+                'in_client' => 'sometimes|integer',
+                'status' => 'sometimes|string|in:Payée,En attente,En retard'
             ]);
-            $Facture->update($validatedData);
-            return response()->json($Facture);
-        }else{
-            return response()->json([
-                'error'=>'Non autorisé'
-            ],500);
+
+            $facture->update($validatedData);
+            $facture->load(['client', 'user']);
+            
+            Log::info('Facture updated successfully', ['facture_id' => $facture->id]);
+            
+            return response()->json($facture, 200);
+            
+        } catch (\Exception $e) {
+            Log::error('Error updating facture', [
+                'error' => $e->getMessage(),
+                'id' => $id
+            ]);
+            return response()->json(['error' => 'Failed to update facture'], 500);
         }
-        
     }
 
     public function destroy($id){
-        $user = Auth::user();
-        if ($user->can('gere les Factures')) {
-            $Facture = Facture::findOrFail($id);
-            $Facture->delete();
-            return [
-                'success' => 'Facture deleted successfully'
-            ];
-        }else{
+        try {
+            Log::info('Starting facture deletion', ['id' => $id]);
+            
+            $user = Auth::user();
+            if (!$user->can('gere les Factures')) {
+                Log::warning('Unauthorized facture deletion attempt', ['user_id' => $user->id]);
+                return response()->json(['error' => 'Non autorisé'], 403);
+            }
+
+            $facture = Facture::findOrFail($id);
+            $facture->delete();
+            
+            Log::info('Facture deleted successfully', ['id' => $id]);
+            
             return response()->json([
-                'error'=>'Non autorisé'
-            ],500);
+                'success' => 'Facture deleted successfully'
+            ], 200);
+            
+        } catch (\Exception $e) {
+            Log::error('Error deleting facture', [
+                'error' => $e->getMessage(),
+                'id' => $id
+            ]);
+            return response()->json(['error' => 'Failed to delete facture'], 500);
         }
-        
     }
 }

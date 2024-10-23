@@ -294,22 +294,61 @@ const store = createStore({
           const response = await axios.get('http://127.0.0.1:8000/api/factures', {
             headers: { 'Authorization': `Bearer ${sessionStorage.getItem('token')}` }
           });
-          console.log(response.data)
           commit('setFactures', response.data);
         } catch (error) {
+          console.error('Error fetching factures:', error);
           commit('setError', 'Error fetching factures');
+          throw error;
         }
       },
   
-      async createFacture({ commit }, factureData) {
+      async createFacture({ commit, state }, factureData) {
         try {
           const response = await axios.post('http://127.0.0.1:8000/api/facture', factureData, {
             headers: { 'Authorization': `Bearer ${sessionStorage.getItem('token')}` }
           });
           
-          commit('setFactures', [...this.state.factures, response.data]); // Add the new facture to the existing list
+          const updatedFactures = [...state.factures, response.data];
+          commit('setFactures', updatedFactures);
+          return response.data;
         } catch (error) {
-          commit('setError', 'Error creating facture');
+          console.error('Error creating facture:', error);
+          commit('setError', error.response?.data?.message || 'Error creating facture');
+          throw error;
+        }
+      },
+  
+      async updateFacture({ commit, state }, factureData) {
+        try {
+          const response = await axios.post(`http://127.0.0.1:8000/api/facture/update/${factureData.id}`, factureData, {
+            headers: { 'Authorization': `Bearer ${sessionStorage.getItem('token')}` }
+          });
+          
+          const updatedFactures = state.factures.map(facture => 
+            facture.id === factureData.id ? response.data : facture
+          );
+          
+          commit('setFactures', updatedFactures);
+          return response.data;
+        } catch (error) {
+          console.error('Error updating facture:', error);
+          commit('setError', error.response?.data?.message || 'Error updating facture');
+          throw error;
+        }
+      },
+  
+      async deleteFacture({ commit, state }, id) {
+        try {
+          await axios.delete(`http://127.0.0.1:8000/api/facture/${id}`, {
+            headers: { 'Authorization': `Bearer ${sessionStorage.getItem('token')}` }
+          });
+          
+          const updatedFactures = state.factures.filter(facture => facture.id !== id);
+          commit('setFactures', updatedFactures);
+        } catch (error) {
+          console.error('Error deleting facture:', error);
+          commit('setError', error.response?.data?.message || 'Error deleting facture');
+          throw error;
         }
       },
 
