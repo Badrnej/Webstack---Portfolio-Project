@@ -35,20 +35,21 @@ class FactureController extends Controller
         }
     }
 
-    public function show_all(Request $reques){
-        $Facture=Facture::paginate(10);
-        return response()->json([
-            $Facture
-        ],200);
-    } 
-
+    public function show_all(Request $request) {
+        $factures = Facture::paginate(10);
+    
+        // Check if the returned data is an array or a single object
+            return response()->json($factures, 200);
+        
+        
+    }
     public function show(Request $reques){
         $id=$reques->id;
         $Facture=Facture::find($id);
         if($Facture){
-            return response()->json([
+            return response()->json(
                 $Facture
-                ],200);
+                ,200);
         }
     }
 

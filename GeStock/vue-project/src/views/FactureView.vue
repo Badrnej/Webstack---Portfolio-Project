@@ -65,7 +65,7 @@
           </div>
 
           <AppTable 
-            :data="filteredFactures" 
+            :data="factures" 
             :columns="tableColumns"
             @editItem="editFacture"
             @deleteItem="deleteFacture"
@@ -97,7 +97,7 @@ const showForm = ref(false)
 const selectedFacture = ref(null)
 const searchQuery = ref('')
 
-const factures = computed(() => store.getters.getFactures)
+const factures = computed(() => store.getters.getFactures || [])
 
 const filteredFactures = computed(() => {
   return factures.value.filter(facture => 
@@ -107,7 +107,7 @@ const filteredFactures = computed(() => {
 })
 
 const totalInvoices = computed(() => factures.value.length)
-const totalAmount = computed(() => factures.value.reduce((sum, facture) => sum + facture.amount, 0).toFixed(2))
+const totalAmount = computed(() => factures.value.reduce((sum, facture) => sum + facture.amount, 0).toFixed(2) || 0)
 const pendingInvoices = computed(() => factures.value.filter(facture => facture.status === 'En attente').length)
 
 const invoiceStatusDistribution = computed(() => {
