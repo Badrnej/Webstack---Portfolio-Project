@@ -21,7 +21,7 @@ class AuthController extends Controller
             $data['name'] = $data['nom'];
 
             $data['password'] = Hash::make($data['password']);
-            logger($data);
+            // logger($data);
             $user = User::create($data);
 
             $token = $user->createToken('auth_token')->plainTextToken;

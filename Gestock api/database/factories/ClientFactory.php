@@ -7,7 +7,7 @@ use App\Models\Client;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Client>
  */
-class ClientFactory extends Factory
+class clientFactory extends Factory
 {
     protected $model = Client::class;
     /**
