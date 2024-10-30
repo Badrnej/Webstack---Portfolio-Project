@@ -46,7 +46,7 @@ const store = useStore()
 const logout = async () => {
   try {
     await store.dispatch('logout')
-    router.push('/login')
+    router.push('/')
   } catch (error) {
     console.error('Logout failed:', error)
     // Handle logout error (e.g., show a notification to the user)
