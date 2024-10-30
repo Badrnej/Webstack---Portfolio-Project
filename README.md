@@ -30,7 +30,7 @@ GeStock is a modern inventory management system built with Vue.js frontend and L
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/GeStock.git
+git clone https://github.com/Badrnej/Webstack---Portfolio-Project.git
 ```
 
 2. Frontend setup:
