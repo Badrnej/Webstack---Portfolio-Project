@@ -1,5 +1,5 @@
 <template>
-  <header class="bg-gradient-to-r from-gray-900 to-gray-800 shadow-lg">
+  <header class="z-40 fixed top-0 w-full bg-gradient-to-r from-gray-900 to-gray-800 shadow-lg">
     <div class="container mx-auto px-4 py-3">
       <div class="flex items-center justify-between">
         <!-- Left side content (assumed to be here) -->

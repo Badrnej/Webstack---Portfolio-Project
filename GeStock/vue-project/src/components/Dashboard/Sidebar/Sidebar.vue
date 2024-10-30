@@ -1,14 +1,14 @@
 <template>
-  <aside class="sidebar bg-gradient-to-br from-indigo-900 via-purple-800 to-orange-400 text-white h-screen w-64 flex flex-col shadow-2xl relative overflow-hidden">
+  <aside class="pt-14 sidebar bg-gradient-to-br from-indigo-900 via-purple-800 to-orange-400 text-white h-screen w-64 flex flex-col shadow-2xl relative overflow-hidden">
     <div class="noise-overlay"></div>
-    <div class="backdrop-blur-md bg-white/10 absolute inset-0"></div>
+    <div class=" bg-white/10 absolute inset-0"></div>
     <div class="relative z-10 p-6">
       <h1 class="text-3xl font-extrabold flex items-center space-x-3">
         <LayoutDashboard class="w-8 h-8" />
         <span class="gradient-text">Dashboard</span>
       </h1>
     </div>
-    <nav class="flex-1 overflow-y-auto px-4 py-2 relative z-10">
+    <nav class="flex flex-col overflow-y-auto px-4 py-2 relative z-10 w-fit mx-auto">
       <AppDashboard />
       <AppCustomer />
       <AppSuppliers />
