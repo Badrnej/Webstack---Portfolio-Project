@@ -9,20 +9,21 @@ import FormModal from '@/components/utils/Modal.vue'
 const store = useStore()
 const showForm = ref(false)
 const selectedClient = ref({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    address: '',
-    siret: ''
-  })
+  firstName: '',
+  lastName: '',
+  email: '',
+  phone: '',
+  address: '',
+  siret: ''
+})
 const searchQuery = ref('')
 const showStats = ref(true)
 
 const customerActivity = computed(() => {
-  return store.getters.getClients.filter(client => 
-    client.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    client.email.toLowerCase().includes(searchQuery.value.toLowerCase())
+  return store.getters.getClients.filter(
+    (client) =>
+      client.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      client.email.toLowerCase().includes(searchQuery.value.toLowerCase())
   )
 })
 
@@ -32,11 +33,11 @@ const customerStats = [
   { month: 'Mar', newCustomers: 12, activeCustomers: 30 },
   { month: 'Apr', newCustomers: 7, activeCustomers: 35 },
   { month: 'May', newCustomers: 10, activeCustomers: 40 },
-  { month: 'Jun', newCustomers: 15, activeCustomers: 45 },
+  { month: 'Jun', newCustomers: 15, activeCustomers: 45 }
 ]
 
-const maxNewCustomers = Math.max(...customerStats.map(stat => stat.newCustomers))
-const maxActiveCustomers = Math.max(...customerStats.map(stat => stat.activeCustomers))
+const maxNewCustomers = Math.max(...customerStats.map((stat) => stat.newCustomers))
+const maxActiveCustomers = Math.max(...customerStats.map((stat) => stat.activeCustomers))
 
 onMounted(() => {
   store.dispatch('fetchClients')
@@ -72,28 +73,32 @@ function editClient(client) {
 }
 
 function deleteClient(clientId) {
-  const confirmDelete = confirm("Are you sure you want to delete this client?")
+  const confirmDelete = confirm('Are you sure you want to delete this client?')
   if (confirmDelete) {
-    store.dispatch('deleteClient', clientId)
+    store
+      .dispatch('deleteClient', clientId)
       .then(() => {
         console.log('Client deleted successfully')
         store.dispatch('fetchClients')
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error deleting client:', error)
       })
   }
 }
 
 async function handleSubmit(formData) {
-  if (selectedClient.value == {
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    address: '',
-    siret: ''
-  }) {
+  if (
+    selectedClient.value ==
+    {
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      address: '',
+      siret: ''
+    }
+  ) {
     await store.dispatch('updateClient', { ...formData, id: selectedClient.value.id })
   } else {
     await store.dispatch('createClient', { ...formData })
@@ -134,8 +139,15 @@ async function handleSubmit(formData) {
               <div class="bg-white p-4 rounded-lg shadow">
                 <h3 class="text-lg font-semibold mb-4">New Customers</h3>
                 <div class="h-64 flex items-end">
-                  <div v-for="stat in customerStats" :key="stat.month" class="flex-1 flex flex-col items-center">
-                    <div class="w-full bg-blue-500 rounded-t" :style="{ height: `${(stat.newCustomers / maxNewCustomers) * 100}%` }"></div>
+                  <div
+                    v-for="stat in customerStats"
+                    :key="stat.month"
+                    class="flex-1 flex flex-col items-center"
+                  >
+                    <div
+                      class="w-full bg-blue-500 rounded-t"
+                      :style="{ height: `${(stat.newCustomers / maxNewCustomers) * 100}%` }"
+                    ></div>
                     <span class="text-xs mt-1">{{ stat.month }}</span>
                   </div>
                 </div>
@@ -143,8 +155,15 @@ async function handleSubmit(formData) {
               <div class="bg-white p-4 rounded-lg shadow">
                 <h3 class="text-lg font-semibold mb-4">Active Customers</h3>
                 <div class="h-64 flex items-end">
-                  <div v-for="stat in customerStats" :key="stat.month" class="flex-1 flex flex-col items-center">
-                    <div class="w-full bg-green-500 rounded-t" :style="{ height: `${(stat.activeCustomers / maxActiveCustomers) * 100}%` }"></div>
+                  <div
+                    v-for="stat in customerStats"
+                    :key="stat.month"
+                    class="flex-1 flex flex-col items-center"
+                  >
+                    <div
+                      class="w-full bg-green-500 rounded-t"
+                      :style="{ height: `${(stat.activeCustomers / maxActiveCustomers) * 100}%` }"
+                    ></div>
                     <span class="text-xs mt-1">{{ stat.month }}</span>
                   </div>
                 </div>
@@ -160,7 +179,9 @@ async function handleSubmit(formData) {
                 placeholder="Search clients..."
                 class="w-full px-4 py-2 border border-gray-300 rounded-md pl-10 focus:outline-none focus:ring-2 focus:ring-violet-500"
               />
-              <Search class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+              <Search
+                class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2"
+              />
             </div>
           </div>
 
@@ -175,10 +196,7 @@ async function handleSubmit(formData) {
     </div>
 
     <FormModal :isVisible="showForm" @close="closeForm">
-      <ClientsForm 
-        :formData="selectedClient" 
-        @submit="handleSubmit" 
-      />
+      <ClientsForm :formData="selectedClient" @submit="handleSubmit" />
     </FormModal>
   </div>
 </template>

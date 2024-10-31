@@ -55,7 +55,10 @@
       ></textarea>
     </div>
 
-    <button type="submit" class="w-full bg-purple-700 text-white py-2 rounded-lg hover:bg-orange-400">
+    <button
+      type="submit"
+      class="w-full bg-purple-700 text-white py-2 rounded-lg hover:bg-orange-400"
+    >
       Enregistrer le client
     </button>
   </form>
@@ -65,38 +68,38 @@
 export default {
   name: 'ClientsForm',
   props: {
-  formData: {
-    type: Object,
-    default: () => ({
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: '',
-      address: '',
-      siret: ''
-    })
-  }
-},
-data() {
-  return {
-    localFormData: { ...this.formData }
-  };
-},
+    formData: {
+      type: Object,
+      default: () => ({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        address: '',
+        siret: ''
+      })
+    }
+  },
+  data() {
+    return {
+      localFormData: { ...this.formData }
+    }
+  },
   methods: {
     submitForm() {
-      console.log('Données du client:', this.localFormData);
-      this.$emit('submit', this.localFormData);
-      
+      console.log('Données du client:', this.localFormData)
+      this.$emit('submit', this.localFormData)
+
       // Resetting form data is handled in parent component after submission.
     }
   },
   watch: {
     formData: {
       handler(newValue) {
-        this.localFormData = { ...newValue }; // Update local copy if prop changes
+        this.localFormData = { ...newValue } // Update local copy if prop changes
       },
       deep: true,
-      immediate: true,
+      immediate: true
     }
   }
 }

@@ -7,7 +7,7 @@ import { RouterLink } from 'vue-router'
 const store = useStore()
 
 const user = reactive({
-  nom: '',
+  name: '', // Changed from 'nom' to 'name'
   email: '',
   password: '',
   password_confirmation: ''
@@ -25,14 +25,16 @@ const signup = () => {
 </script>
 
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-100 p-6">
+  <div
+    class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-100 p-6"
+  >
     <div class="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden">
       <div class="p-8 space-y-6">
         <div class="text-center">
           <h1 class="text-3xl font-bold text-purple-700 mb-2">Create an account</h1>
           <p class="text-gray-600">Join us today and start your journey</p>
         </div>
-        
+
         <div class="flex justify-center">
           <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center">
             <UserPlus class="w-12 h-12 text-purple-500" />
@@ -43,23 +45,29 @@ const signup = () => {
           <div>
             <label for="nom" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
             <div class="relative">
-              <User class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+              <User
+                class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2"
+              />
               <input
-                v-model="user.nom"
+                v-model="user.name"
                 type="text"
                 id="nom"
-                name="nom"
+                name="name"
                 class="pl-10 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 placeholder="John Doe"
                 required
-              >
+              />
             </div>
           </div>
 
           <div>
-            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email address</label>
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-1"
+              >Email address</label
+            >
             <div class="relative">
-              <Mail class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+              <Mail
+                class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2"
+              />
               <input
                 v-model="user.email"
                 type="email"
@@ -68,14 +76,18 @@ const signup = () => {
                 class="pl-10 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 placeholder="you@example.com"
                 required
-              >
+              />
             </div>
           </div>
-          
+
           <div>
-            <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <label for="password" class="block text-sm font-medium text-gray-700 mb-1"
+              >Password</label
+            >
             <div class="relative">
-              <Lock class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+              <Lock
+                class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2"
+              />
               <input
                 v-model="user.password"
                 type="password"
@@ -84,14 +96,18 @@ const signup = () => {
                 class="pl-10 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 placeholder="••••••••"
                 required
-              >
+              />
             </div>
           </div>
 
           <div>
-            <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+            <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1"
+              >Confirm Password</label
+            >
             <div class="relative">
-              <Lock class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+              <Lock
+                class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2"
+              />
               <input
                 v-model="user.password_confirmation"
                 type="password"
@@ -100,7 +116,7 @@ const signup = () => {
                 class="pl-10 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 placeholder="••••••••"
                 required
-              >
+              />
             </div>
           </div>
 
@@ -121,7 +137,7 @@ const signup = () => {
 
         <div class="text-center">
           <p class="text-sm text-gray-600">
-            Already have an account? 
+            Already have an account?
             <RouterLink to="/" class="font-medium text-purple-600 hover:text-orange-500">
               Sign in
             </RouterLink>

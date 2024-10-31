@@ -2,49 +2,59 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\WelcomeEmail;
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
     public function register(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            "name" => "required|string|max:255",
+            "email" => "required|string|email|max:255|unique:users",
+            "password" => "required|string|min:8",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(
+                [
+                    "message" => "Validation failed",
+                    "errors" => $validator->errors(),
+                ],
+                422
+            );
+        }
+
         try {
-            $data = $request->validate([
-                'nom' => 'required|string',
-                'email' => 'required|email|unique:users,email',
-                'password' => 'required|string|min:8|confirmed'
+            $user = User::create([
+                "name" => $request->name,
+                "email" => $request->email,
+                "password" => Hash::make($request->password),
             ]);
-            $data['name'] = $data['nom'];
 
-            $data['password'] = Hash::make($data['password']);
-            logger($data);
-            $user = User::create($data);
+            // Assign the user role
+            $user->assignRole("user"); // or 'admin' if you want to make them admin
 
-            $token = $user->createToken('auth_token')->plainTextToken;
+            $token = $user->createToken("auth_token")->plainTextToken;
 
-            // Uncomment if you want to send email
-            // $d = [
-            //     'title' => 'Inscrivez-vous à GeStock',
-            //     'message' => 'Welcome to GeStock'
-            // ];
-            // Mail::to($request->email)->send(new WelcomeEmail($d));
-
-            $user->assignRole('admin');
-
-            return response()->json([
-                'user' => $user,
-                'token' => $token,
-                'role' => $user->getAllPermissions()
-            ], 201);
+            return response()->json(
+                [
+                    "message" => "Registration successful",
+                    "user" => $user,
+                    "token" => $token,
+                ],
+                201
+            );
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Registration failed',
-                'error' => $e->getMessage()
-            ], 400);
+            return response()->json(
+                [
+                    "message" => "Registration failed",
+                    "error" => $e->getMessage(),
+                ],
+                500
+            );
         }
     }
 
@@ -52,30 +62,39 @@ class AuthController extends Controller
     {
         try {
             $data = $request->validate([
-                'email' => 'required|email|exists:users',
-                'password' => 'required'
+                "email" => "required|email|exists:users",
+                "password" => "required",
             ]);
 
-            $user = User::where('email', $data['email'])->first();
+            $user = User::where("email", $data["email"])->first();
 
-            if (!$user || !Hash::check($data['password'], $user->password)) {
-                return response()->json([
-                    'message' => 'Invalid credentials'
-                ], 401);
+            if (!$user || !Hash::check($data["password"], $user->password)) {
+                return response()->json(
+                    [
+                        "message" => "Invalid credentials",
+                    ],
+                    401
+                );
             }
 
-            $token = $user->createToken('auth_token')->plainTextToken;
+            $token = $user->createToken("auth_token")->plainTextToken;
 
-            return response()->json([
-                'user' => $user,
-                'token' => $token,
-                'role' => $user->getAllPermissions()
-            ], 200);
+            return response()->json(
+                [
+                    "user" => $user,
+                    "token" => $token,
+                    "role" => $user->getAllPermissions(),
+                ],
+                200
+            );
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Login failed',
-                'error' => $e->getMessage()
-            ], 400);
+            return response()->json(
+                [
+                    "message" => "Login failed",
+                    "error" => $e->getMessage(),
+                ],
+                400
+            );
         }
     }
 
@@ -84,14 +103,20 @@ class AuthController extends Controller
         try {
             $request->user()->currentAccessToken()->delete();
 
-            return response()->json([
-                'message' => 'Successfully logged out'
-            ], 200);
+            return response()->json(
+                [
+                    "message" => "Successfully logged out",
+                ],
+                200
+            );
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Logout failed',
-                'error' => $e->getMessage()
-            ], 400);
+            return response()->json(
+                [
+                    "message" => "Logout failed",
+                    "error" => $e->getMessage(),
+                ],
+                400
+            );
         }
     }
 }

@@ -1,7 +1,9 @@
 <template>
-  <aside class="pt-14 sidebar bg-gradient-to-br from-indigo-900 via-purple-800 to-orange-400 text-white h-screen w-64 flex flex-col shadow-2xl relative overflow-hidden">
+  <aside
+    class="pt-14 sidebar bg-gradient-to-br from-indigo-900 via-purple-800 to-orange-400 text-white h-screen w-64 flex flex-col shadow-2xl relative overflow-hidden"
+  >
     <div class="noise-overlay"></div>
-    <div class=" bg-white/10 absolute inset-0"></div>
+    <div class="bg-white/10 absolute inset-0"></div>
     <div class="relative z-10 p-6">
       <h1 class="text-3xl font-extrabold flex items-center space-x-3">
         <LayoutDashboard class="w-8 h-8" />
@@ -9,7 +11,7 @@
       </h1>
     </div>
     <nav class="flex flex-col overflow-y-auto px-4 py-2 relative z-10 w-fit mx-auto">
-      <AppDashboard />
+      <!-- <AppDashboard /> -->
       <AppCustomer />
       <AppSuppliers />
       <AppUsers />
@@ -19,7 +21,6 @@
 </template>
 
 <script setup>
-
 import AppDashboard from './AppDashboard.vue'
 import AppCustomer from './AppCustomer.vue'
 import AppSuppliers from './AppSuppliers.vue'

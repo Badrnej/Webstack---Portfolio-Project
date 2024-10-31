@@ -27,31 +27,31 @@ const router = createRouter({
         {
           path: 'dashboard',
           name: 'dashboard',
-          component: DashboardView,
+          component: CustomersView
         },
         {
           path: 'customers',
           name: 'customers',
-          component: CustomersView,
+          component: CustomersView
         },
         {
           path: 'suppliers',
           name: 'suppliers',
-          component: SuppliersView,
+          component: SuppliersView
         },
         {
           path: 'users',
           name: 'users',
-          component: UsersView,
+          component: UsersView
         },
         {
           path: 'factures',
           name: 'factures',
-          component: FactureView,
-        },   
+          component: FactureView
+        }
         // Add more routes as needed
-      ],
-    },
+      ]
+    }
   ]
 })
 
